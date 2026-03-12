@@ -1,0 +1,537 @@
+{
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "10.0.0" },
+    { "type": "datasource", "id": "prometheus", "name": "Prometheus", "version": "1.0.0" },
+    { "type": "panel", "id": "stat", "name": "Stat", "version": "" },
+    { "type": "panel", "id": "timeseries", "name": "Time series", "version": "" },
+    { "type": "panel", "id": "gauge", "name": "Gauge", "version": "" },
+    { "type": "panel", "id": "barchart", "name": "Bar chart", "version": "" },
+    { "type": "panel", "id": "table", "name": "Table", "version": "" }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "Instance Overview",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            { "options": { "0": { "color": "red", "text": "DOWN" }, "1": { "color": "green", "text": "UP" } }, "type": "value" }
+          ],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] },
+          "color": { "mode": "thresholds" }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 3, "x": 0, "y": 1 },
+      "id": 1,
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value" },
+      "title": "Instance Status",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_up{domain=\"$domain\"}", "legendFormat": "" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "blue" } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 3, "x": 3, "y": 1 },
+      "id": 2,
+      "options": { "colorMode": "background_solid", "graphMode": "area", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name" },
+      "title": "Online Users",
+      "type": "stat",
+      "targets": [
+        { "expr": "sharkey_users_online{domain=\"$domain\"}", "legendFormat": "Local" },
+        { "expr": "sharkey_users_online_network{domain=\"$domain\"}", "legendFormat": "Network" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "purple" } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 3, "x": 6, "y": 1 },
+      "id": 3,
+      "options": { "colorMode": "none", "graphMode": "area", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name" },
+      "title": "Local Users",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_users_local_total{domain=\"$domain\"}", "legendFormat": "Local" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "orange" } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 3, "x": 9, "y": 1 },
+      "id": 4,
+      "options": { "colorMode": "none", "graphMode": "area", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name" },
+      "title": "Notes (Local)",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_notes_local_total{domain=\"$domain\"}", "legendFormat": "Local Notes" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "yellow" } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 3, "x": 12, "y": 1 },
+      "id": 5,
+      "options": { "colorMode": "none", "graphMode": "area", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value" },
+      "title": "Reactions",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_reactions_total{domain=\"$domain\"}", "legendFormat": "" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "super-light-blue" } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 3, "x": 15, "y": 1 },
+      "id": 6,
+      "options": { "colorMode": "none", "graphMode": "area", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value" },
+      "title": "Federated Instances",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_instances_total{domain=\"$domain\"}", "legendFormat": "" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0, "max": 1,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.7 }, { "color": "red", "value": 0.9 }] },
+          "color": { "mode": "thresholds" }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "id": 7,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": false, "showThresholdMarkers": true },
+      "title": "Filesystem Usage",
+      "type": "gauge",
+      "targets": [{ "expr": "sharkey_server_fs_used_bytes{domain=\"$domain\"} / sharkey_server_fs_total_bytes{domain=\"$domain\"}", "legendFormat": "Disk" }]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 101,
+      "title": "Growth",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Remote" }, "properties": [{ "id": "custom.fillOpacity", "value": 5 }] }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 6 },
+      "id": 10,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Notes",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_notes_local_total{domain=\"$domain\"}", "legendFormat": "Local" },
+        { "expr": "sharkey_notes_total{domain=\"$domain\"} - sharkey_notes_local_total{domain=\"$domain\"}", "legendFormat": "Remote" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 6 },
+      "id": 11,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Users",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_users_local_total{domain=\"$domain\"}", "legendFormat": "Local" },
+        { "expr": "sharkey_users_total{domain=\"$domain\"} - sharkey_users_local_total{domain=\"$domain\"}", "legendFormat": "Remote" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 6 },
+      "id": 12,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Active Users (Daily)",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_active_users_read{domain=\"$domain\"}", "legendFormat": "Read" },
+        { "expr": "sharkey_active_users_write{domain=\"$domain\"}", "legendFormat": "Write" },
+        { "expr": "sharkey_active_users_readwrite{domain=\"$domain\"}", "legendFormat": "Read+Write" }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "id": 106,
+      "title": "Drive Storage",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 20, "spanNulls": true }, "unit": "bytes" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 15 },
+      "id": 13,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Drive Usage",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_drive_usage_local_bytes{domain=\"$domain\"}", "legendFormat": "Local" },
+        { "expr": "sharkey_drive_usage_remote_bytes{domain=\"$domain\"}", "legendFormat": "Remote" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "fixed", "fixedColor": "text" }, "unit": "bytes" },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 15 },
+      "id": 14,
+      "options": { "colorMode": "none", "graphMode": "none", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name" },
+      "title": "Local Drive",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_drive_usage_local_bytes{domain=\"$domain\"}", "legendFormat": "Local" }]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "fixed", "fixedColor": "text" }, "unit": "bytes" },
+        "overrides": []
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 15 },
+      "id": 15,
+      "options": { "colorMode": "none", "graphMode": "none", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value_and_name" },
+      "title": "Remote Drive",
+      "type": "stat",
+      "targets": [{ "expr": "sharkey_drive_usage_remote_bytes{domain=\"$domain\"}", "legendFormat": "Remote" }]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 },
+      "id": 102,
+      "title": "Federation",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 24 },
+      "id": 20,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Federation — Instance Counts",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_federation_subscribing_total{domain=\"$domain\"}", "legendFormat": "Subscribing" },
+        { "expr": "sharkey_federation_publishing_total{domain=\"$domain\"}", "legendFormat": "Publishing" },
+        { "expr": "sharkey_federation_bidirectional_total{domain=\"$domain\"}", "legendFormat": "Bidirectional" },
+        { "expr": "sharkey_federation_stalled{domain=\"$domain\"}", "legendFormat": "Stalled" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 24 },
+      "id": 21,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Federation — Active Instances (Hourly)",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_federation_delivered_instances{domain=\"$domain\"}", "legendFormat": "Delivered To" },
+        { "expr": "sharkey_federation_inbox_instances{domain=\"$domain\"}", "legendFormat": "Received From" },
+        { "expr": "sharkey_federation_subscribing_active{domain=\"$domain\"}", "legendFormat": "Active Subscribers" },
+        { "expr": "sharkey_federation_publishing_active{domain=\"$domain\"}", "legendFormat": "Active Publishers" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "spanNulls": true },
+          "unit": "short"
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] },
+          { "matcher": { "id": "byName", "options": "Succeeded" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }] },
+          { "matcher": { "id": "byName", "options": "Inbox Received" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }] }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 24 },
+      "id": 22,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "ActivityPub Requests (Hourly)",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_ap_deliver_succeeded{domain=\"$domain\"}", "legendFormat": "Succeeded" },
+        { "expr": "sharkey_ap_deliver_failed{domain=\"$domain\"}", "legendFormat": "Failed" },
+        { "expr": "sharkey_ap_inbox_received{domain=\"$domain\"}", "legendFormat": "Inbox Received" }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 32 },
+      "id": 103,
+      "title": "Queues (requires token)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true, "stacking": { "mode": "none" } },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 33 },
+      "id": 30,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
+      "title": "Queue — Waiting Jobs",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_queue_deliver_waiting{domain=\"$domain\"}", "legendFormat": "deliver" },
+        { "expr": "sharkey_queue_inbox_waiting{domain=\"$domain\"}", "legendFormat": "inbox" },
+        { "expr": "sharkey_queue_db_waiting{domain=\"$domain\"}", "legendFormat": "db" },
+        { "expr": "sharkey_queue_objectStorage_waiting{domain=\"$domain\"}", "legendFormat": "objectStorage" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 33 },
+      "id": 32,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
+      "title": "Queue — Active Jobs",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_queue_deliver_active{domain=\"$domain\"}", "legendFormat": "deliver" },
+        { "expr": "sharkey_queue_inbox_active{domain=\"$domain\"}", "legendFormat": "inbox" },
+        { "expr": "sharkey_queue_db_active{domain=\"$domain\"}", "legendFormat": "db" },
+        { "expr": "sharkey_queue_objectStorage_active{domain=\"$domain\"}", "legendFormat": "objectStorage" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true },
+          "unit": "short"
+        },
+        "overrides": [
+          { "matcher": { "id": "byRegexp", "options": ".*delayed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "orange" } }] },
+          { "matcher": { "id": "byRegexp", "options": ".*failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 33 },
+      "id": 31,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
+      "title": "Queue — Delayed & Failed Jobs",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_queue_deliver_delayed{domain=\"$domain\"}", "legendFormat": "deliver delayed" },
+        { "expr": "sharkey_queue_inbox_delayed{domain=\"$domain\"}", "legendFormat": "inbox delayed" },
+        { "expr": "sharkey_queue_db_delayed{domain=\"$domain\"}", "legendFormat": "db delayed" },
+        { "expr": "sharkey_queue_objectStorage_delayed{domain=\"$domain\"}", "legendFormat": "objectStorage delayed" },
+        { "expr": "sharkey_queue_deliver_failed{domain=\"$domain\"}", "legendFormat": "deliver failed" },
+        { "expr": "sharkey_queue_inbox_failed{domain=\"$domain\"}", "legendFormat": "inbox failed" },
+        { "expr": "sharkey_queue_db_failed{domain=\"$domain\"}", "legendFormat": "db failed" },
+        { "expr": "sharkey_queue_objectStorage_failed{domain=\"$domain\"}", "legendFormat": "objectStorage failed" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 41 },
+      "id": 33,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
+      "title": "Queue — Completed Jobs",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_queue_deliver_completed{domain=\"$domain\"}", "legendFormat": "deliver" },
+        { "expr": "sharkey_queue_inbox_completed{domain=\"$domain\"}", "legendFormat": "inbox" },
+        { "expr": "sharkey_queue_db_completed{domain=\"$domain\"}", "legendFormat": "db" },
+        { "expr": "sharkey_queue_objectStorage_completed{domain=\"$domain\"}", "legendFormat": "objectStorage" }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 49 },
+      "id": 104,
+      "title": "Database (requires token)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 50 },
+      "id": 40,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"], "sortBy": "Last *", "sortDesc": true } },
+      "title": "DB Table — Row Counts",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_db_note_rows{domain=\"$domain\"}", "legendFormat": "note" },
+        { "expr": "sharkey_db_user_rows{domain=\"$domain\"}", "legendFormat": "user" },
+        { "expr": "sharkey_db_user_profile_rows{domain=\"$domain\"}", "legendFormat": "user_profile" },
+        { "expr": "sharkey_db_drive_file_rows{domain=\"$domain\"}", "legendFormat": "drive_file" },
+        { "expr": "sharkey_db_instance_rows{domain=\"$domain\"}", "legendFormat": "instance" },
+        { "expr": "sharkey_db_following_rows{domain=\"$domain\"}", "legendFormat": "following" },
+        { "expr": "sharkey_db_poll_rows{domain=\"$domain\"}", "legendFormat": "poll" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "bytes" },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 50 },
+      "id": 41,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"], "sortBy": "Last *", "sortDesc": true } },
+      "title": "DB Table — Sizes",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_db_note_size_bytes{domain=\"$domain\"}", "legendFormat": "note" },
+        { "expr": "sharkey_db_user_size_bytes{domain=\"$domain\"}", "legendFormat": "user" },
+        { "expr": "sharkey_db_user_profile_size_bytes{domain=\"$domain\"}", "legendFormat": "user_profile" },
+        { "expr": "sharkey_db_drive_file_size_bytes{domain=\"$domain\"}", "legendFormat": "drive_file" },
+        { "expr": "sharkey_db_instance_size_bytes{domain=\"$domain\"}", "legendFormat": "instance" }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 58 },
+      "id": 105,
+      "title": "Server",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "text" } }, "overrides": [] },
+          "gridPos": { "h": 4, "w": 4, "x": 0, "y": 59 },
+          "id": 50,
+          "options": { "colorMode": "none", "graphMode": "none", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value" },
+          "title": "CPU Cores",
+          "type": "stat",
+          "targets": [{ "expr": "sharkey_server_cpu_cores{domain=\"$domain\"}", "legendFormat": "" }]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "fieldConfig": { "defaults": { "unit": "bytes", "color": { "mode": "fixed", "fixedColor": "text" } }, "overrides": [] },
+          "gridPos": { "h": 4, "w": 4, "x": 4, "y": 59 },
+          "id": 51,
+          "options": { "colorMode": "none", "graphMode": "none", "justifyMode": "center", "reduceOptions": { "calcs": ["lastNotNull"] }, "textMode": "value" },
+          "title": "Total Memory",
+          "type": "stat",
+          "targets": [{ "expr": "sharkey_server_mem_total_bytes{domain=\"$domain\"}", "legendFormat": "" }]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit", "min": 0, "max": 1,
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 0.7 }, { "color": "red", "value": 0.9 }] },
+              "color": { "mode": "thresholds" }
+            },
+            "overrides": []
+          },
+          "gridPos": { "h": 4, "w": 8, "x": 8, "y": 59 },
+          "id": 52,
+          "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "showThresholdLabels": false, "showThresholdMarkers": true },
+          "title": "Filesystem Usage",
+          "type": "gauge",
+          "targets": [{ "expr": "sharkey_server_fs_used_bytes{domain=\"$domain\"} / sharkey_server_fs_total_bytes{domain=\"$domain\"}", "legendFormat": "" }]
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "${datasource}" },
+          "fieldConfig": {
+            "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 20, "spanNulls": true }, "unit": "bytes" },
+            "overrides": []
+          },
+          "gridPos": { "h": 8, "w": 16, "x": 0, "y": 63 },
+          "id": 53,
+          "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+          "title": "Filesystem Over Time",
+          "type": "timeseries",
+          "targets": [
+            { "expr": "sharkey_server_fs_total_bytes{domain=\"$domain\"}", "legendFormat": "Total" },
+            { "expr": "sharkey_server_fs_used_bytes{domain=\"$domain\"}", "legendFormat": "Used" }
+          ]
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["sharkey", "fediverse", "misskey"],
+  "templating": {
+    "list": [
+      {
+        "current": {},
+        "hide": 0,
+        "includeAll": false,
+        "label": "Prometheus",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {},
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "definition": "label_values(sharkey_up, domain)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Instance",
+        "multi": false,
+        "name": "domain",
+        "options": [],
+        "query": "label_values(sharkey_up, domain)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-24h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Sharkey Instance",
+  "uid": "sharkey-instance",
+  "version": 1
+}
