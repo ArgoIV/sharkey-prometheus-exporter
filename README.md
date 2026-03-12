@@ -40,7 +40,7 @@ All metrics include a `domain` label (auto-detected from the instance, or set vi
 | `sharkey_ap_deliver_failed` | AP deliveries failed (last hour) |
 | `sharkey_ap_inbox_received` | AP inbox messages received (last hour) |
 
-\* Drive usage may report 0 in some Sharkey versions.
+\* Drive usage may report 0 in some Sharkey versions, and some configurations (e.g. using object storage backends).
 
 ### Default: admin API (requires token)
 
