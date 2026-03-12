@@ -592,10 +592,13 @@ EOF
     queue_stats="$(api_post_auth admin/queue/stats)"
 
     if api_ok "$queue_stats"; then
-        # Extract all 4 default queues with all 5 states each
+        # Extract all 4 default queues — waiting, active, delayed only.
+        # Note: "completed" and "failed" are omitted — BullMQ retains only
+        # ~10 completed and ~30 failed jobs per type (removeOnComplete/removeOnFail),
+        # so those counts reflect retention limits, not real totals.
         queue_metrics="$(echo "$queue_stats" | jq -r '
             to_entries[] |
-            "# HELP sharkey_queue_\(.key)_waiting Waiting jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_waiting gauge\nsharkey_queue_\(.key)_waiting \(.value.waiting // 0)\n# HELP sharkey_queue_\(.key)_active Active jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_active gauge\nsharkey_queue_\(.key)_active \(.value.active // 0)\n# HELP sharkey_queue_\(.key)_delayed Delayed jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_delayed gauge\nsharkey_queue_\(.key)_delayed \(.value.delayed // 0)\n# HELP sharkey_queue_\(.key)_completed Completed jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_completed gauge\nsharkey_queue_\(.key)_completed \(.value.completed // 0)\n# HELP sharkey_queue_\(.key)_failed Failed jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_failed gauge\nsharkey_queue_\(.key)_failed \(.value.failed // 0)"
+            "# HELP sharkey_queue_\(.key)_waiting Waiting jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_waiting gauge\nsharkey_queue_\(.key)_waiting \(.value.waiting // 0)\n# HELP sharkey_queue_\(.key)_active Active jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_active gauge\nsharkey_queue_\(.key)_active \(.value.active // 0)\n# HELP sharkey_queue_\(.key)_delayed Delayed jobs in \(.key) queue\n# TYPE sharkey_queue_\(.key)_delayed gauge\nsharkey_queue_\(.key)_delayed \(.value.delayed // 0)"
         ' 2>/dev/null)"
 
         if [[ -n "$queue_metrics" ]]; then
@@ -633,7 +636,7 @@ EOF
                 .[] |
                 .name as $name |
                 .counts // {} |
-                "# HELP sharkey_extqueue_\($name)_waiting Waiting jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_waiting gauge\nsharkey_extqueue_\($name)_waiting \(.waiting // 0)\n# HELP sharkey_extqueue_\($name)_active Active jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_active gauge\nsharkey_extqueue_\($name)_active \(.active // 0)\n# HELP sharkey_extqueue_\($name)_delayed Delayed jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_delayed gauge\nsharkey_extqueue_\($name)_delayed \(.delayed // 0)\n# HELP sharkey_extqueue_\($name)_completed Completed jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_completed gauge\nsharkey_extqueue_\($name)_completed \(.completed // 0)\n# HELP sharkey_extqueue_\($name)_failed Failed jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_failed gauge\nsharkey_extqueue_\($name)_failed \(.failed // 0)"
+                "# HELP sharkey_extqueue_\($name)_waiting Waiting jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_waiting gauge\nsharkey_extqueue_\($name)_waiting \(.waiting // 0)\n# HELP sharkey_extqueue_\($name)_active Active jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_active gauge\nsharkey_extqueue_\($name)_active \(.active // 0)\n# HELP sharkey_extqueue_\($name)_delayed Delayed jobs in \($name) queue\n# TYPE sharkey_extqueue_\($name)_delayed gauge\nsharkey_extqueue_\($name)_delayed \(.delayed // 0)"
             ' 2>/dev/null)"
 
             if [[ -n "$ext_queue_metrics" ]]; then

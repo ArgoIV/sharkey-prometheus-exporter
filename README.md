@@ -8,6 +8,8 @@ By default, exports a useful set of metrics that covers most monitoring needs. O
 
 All metrics include a `domain` label (auto-detected from the instance, or set via `--domain`) for multi-instance dashboards.
 
+![Grafana dashboard](docs/dashboard.png)
+
 ## Metrics Exported
 
 ### Default: public API (no auth required)
@@ -53,8 +55,6 @@ All metrics include a `domain` label (auto-detected from the instance, or set vi
 | `sharkey_queue_<name>_waiting` | Waiting jobs per queue (deliver, inbox, db, objectStorage) |
 | `sharkey_queue_<name>_active` | Active jobs per queue |
 | `sharkey_queue_<name>_delayed` | Delayed jobs per queue |
-| `sharkey_queue_<name>_completed` | Completed jobs per queue |
-| `sharkey_queue_<name>_failed` | Failed jobs per queue |
 | `sharkey_db_<table>_rows` | Estimated row count per key DB table |
 | `sharkey_db_<table>_size_bytes` | Size per key DB table (bytes) |
 

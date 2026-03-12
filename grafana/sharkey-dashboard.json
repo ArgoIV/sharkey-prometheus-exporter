@@ -232,7 +232,7 @@
         "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 24 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
       "id": 20,
       "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
       "title": "Federation — Instance Counts",
@@ -250,7 +250,7 @@
         "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 24 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 },
       "id": 21,
       "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
       "title": "Federation — Active Instances (Hourly)",
@@ -260,30 +260,6 @@
         { "expr": "sharkey_federation_inbox_instances{domain=\"$domain\"}", "legendFormat": "Received From" },
         { "expr": "sharkey_federation_subscribing_active{domain=\"$domain\"}", "legendFormat": "Active Subscribers" },
         { "expr": "sharkey_federation_publishing_active{domain=\"$domain\"}", "legendFormat": "Active Publishers" }
-      ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "${datasource}" },
-      "fieldConfig": {
-        "defaults": {
-          "custom": { "drawStyle": "line", "fillOpacity": 15, "spanNulls": true },
-          "unit": "short"
-        },
-        "overrides": [
-          { "matcher": { "id": "byName", "options": "Failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] },
-          { "matcher": { "id": "byName", "options": "Succeeded" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }] },
-          { "matcher": { "id": "byName", "options": "Inbox Received" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }] }
-        ]
-      },
-      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 24 },
-      "id": 22,
-      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
-      "title": "ActivityPub Requests (Hourly)",
-      "type": "timeseries",
-      "targets": [
-        { "expr": "sharkey_ap_deliver_succeeded{domain=\"$domain\"}", "legendFormat": "Succeeded" },
-        { "expr": "sharkey_ap_deliver_failed{domain=\"$domain\"}", "legendFormat": "Failed" },
-        { "expr": "sharkey_ap_inbox_received{domain=\"$domain\"}", "legendFormat": "Inbox Received" }
       ]
     },
     {
@@ -350,35 +326,76 @@
       "gridPos": { "h": 8, "w": 8, "x": 16, "y": 33 },
       "id": 31,
       "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
-      "title": "Queue — Delayed & Failed Jobs",
+      "title": "Queue — Delayed Jobs",
       "type": "timeseries",
       "targets": [
-        { "expr": "sharkey_queue_deliver_delayed{domain=\"$domain\"}", "legendFormat": "deliver delayed" },
-        { "expr": "sharkey_queue_inbox_delayed{domain=\"$domain\"}", "legendFormat": "inbox delayed" },
-        { "expr": "sharkey_queue_db_delayed{domain=\"$domain\"}", "legendFormat": "db delayed" },
-        { "expr": "sharkey_queue_objectStorage_delayed{domain=\"$domain\"}", "legendFormat": "objectStorage delayed" },
-        { "expr": "sharkey_queue_deliver_failed{domain=\"$domain\"}", "legendFormat": "deliver failed" },
-        { "expr": "sharkey_queue_inbox_failed{domain=\"$domain\"}", "legendFormat": "inbox failed" },
-        { "expr": "sharkey_queue_db_failed{domain=\"$domain\"}", "legendFormat": "db failed" },
-        { "expr": "sharkey_queue_objectStorage_failed{domain=\"$domain\"}", "legendFormat": "objectStorage failed" }
+        { "expr": "sharkey_queue_deliver_delayed{domain=\"$domain\"}", "legendFormat": "deliver" },
+        { "expr": "sharkey_queue_inbox_delayed{domain=\"$domain\"}", "legendFormat": "inbox" },
+        { "expr": "sharkey_queue_db_delayed{domain=\"$domain\"}", "legendFormat": "db" },
+        { "expr": "sharkey_queue_objectStorage_delayed{domain=\"$domain\"}", "legendFormat": "objectStorage" }
       ]
     },
     {
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
       "fieldConfig": {
-        "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 10, "spanNulls": true }, "unit": "short" },
-        "overrides": []
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "spanNulls": true },
+          "unit": "short"
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Succeeded" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }] },
+          { "matcher": { "id": "byName", "options": "Failed" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }] }
+        ]
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 41 },
-      "id": 33,
-      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["lastNotNull"] } },
-      "title": "Queue — Completed Jobs",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 41 },
+      "id": 34,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "AP Delivery — Succeeded vs Failed (Hourly)",
       "type": "timeseries",
       "targets": [
-        { "expr": "sharkey_queue_deliver_completed{domain=\"$domain\"}", "legendFormat": "deliver" },
-        { "expr": "sharkey_queue_inbox_completed{domain=\"$domain\"}", "legendFormat": "inbox" },
-        { "expr": "sharkey_queue_db_completed{domain=\"$domain\"}", "legendFormat": "db" },
-        { "expr": "sharkey_queue_objectStorage_completed{domain=\"$domain\"}", "legendFormat": "objectStorage" }
+        { "expr": "sharkey_ap_deliver_succeeded{domain=\"$domain\"}", "legendFormat": "Succeeded" },
+        { "expr": "sharkey_ap_deliver_failed{domain=\"$domain\"}", "legendFormat": "Failed" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "spanNulls": true },
+          "unit": "percentunit",
+          "min": 0, "max": 1,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "yellow", "value": 0.9 }, { "color": "green", "value": 0.95 }] },
+          "color": { "mode": "continuous-GrYlRd" }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 41 },
+      "id": 35,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "AP Delivery — Success Rate (Hourly)",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_ap_deliver_succeeded{domain=\"$domain\"} / (sharkey_ap_deliver_succeeded{domain=\"$domain\"} + sharkey_ap_deliver_failed{domain=\"$domain\"})", "legendFormat": "Success Rate" }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "fillOpacity": 15, "spanNulls": true },
+          "unit": "short"
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Inbox Received" }, "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }] }
+        ]
+      },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 41 },
+      "id": 36,
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "AP Inbox — Received (Hourly)",
+      "type": "timeseries",
+      "targets": [
+        { "expr": "sharkey_ap_inbox_received{domain=\"$domain\"}", "legendFormat": "Inbox Received" }
       ]
     },
     {
